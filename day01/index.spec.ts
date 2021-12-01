@@ -1,10 +1,18 @@
 import { readInput } from "../utils";
-import { run1 } from "./index";
+import { run1, run2 } from "./index";
 
 test("day01 - run 1", () => {
     const data = readInput(__dirname);
 
     const response = run1(data);
 
-    expect(response).toBe("456");
+    console.log(response);
+});
+
+test("day01 - run 2", () => {
+    const data = readInput(__dirname);
+
+    const response = run2(data);
+
+    console.log(response);
 });
