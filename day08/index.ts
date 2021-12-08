@@ -1,3 +1,5 @@
+import * as _ from "lodash";
+
 function run1(data: Array<string>): number {
     let digits = 0;
 
@@ -13,29 +15,25 @@ function run2(data: Array<string>): number {
     let total = 0;
 
     for (const line of data) {
-        const splitLine = line.split(" | ").map((value) => value.split(" "));
-        const input = splitLine[0];
-        const output = splitLine[1];
+        const [input, output] = line.split(" | ").map((value) => value.split(" "));
 
-        const traductor = {} as Record<number, string>;
-        const segment = {} as Record<string, string>;
-
+        const translator = {} as Record<number, string>;
         const digit6 = [] as Array<string>;
         const digit5 = [] as Array<string>;
 
         for (const digit of input) {
             switch (digit.length) {
                 case 2:
-                    traductor[1] = digit;
+                    translator[1] = digit;
                     break;
                 case 4:
-                    traductor[4] = digit;
+                    translator[4] = digit;
                     break;
                 case 3:
-                    traductor[7] = digit;
+                    translator[7] = digit;
                     break;
                 case 7:
-                    traductor[8] = digit;
+                    translator[8] = digit;
                     break;
                 case 5:
                     digit5.push(digit);
@@ -46,37 +44,25 @@ function run2(data: Array<string>): number {
             }
         }
 
-        const segmentA = findDifferenceChars(traductor[1], traductor[7])[0];
-        segment[segmentA] = "a";
+        const segments = findDifferenceChars(translator[4], translator[1]);
+        const segmentD = (digit5.join().split(segments[0]).length > digit5.join().split(segments[1]).length) ? segments[0] : segments[1];
 
-        const segmentB = findDifferenceChars(traductor[4], traductor[1]);
+        translator[3] = digit5.find((digit) => (findCommonChars(digit, translator[1]).length === 2)) as string;
+        digit5.splice(digit5.indexOf(translator[3]), 1);
+        translator[5] = digit5.find((digit) => (findCommonChars(digit, translator[3] + translator[4]).length === 5)) as string;
+        translator[2] = digit5.find((digit) => (findCommonChars(digit, translator[5]).length === 3)) as string;
+        translator[6] = digit6.find((digit) => (findCommonChars(digit, translator[1]).length === 1)) as string;
+        translator[0] = digit6.find((digit) => !digit.includes(segmentD)) as string;
+        translator[9] = digit6.find((digit) => ![translator[0], translator[6]].includes(digit)) as string;
 
-        if (digit5.join().split(segmentB[0]).length > digit5.join().split(segmentB[1]).length) {
-            segment[segmentB[0]] = "d";
-            segment[segmentB[1]] = "b";
+        const inverter = {} as Record<string, number>;
+        for (let i = 0; i < 10; i++) {
+            inverter[getUniqueId(translator[i])] = i;
         }
-        else {
-            segment[segmentB[0]] = "b";
-            segment[segmentB[1]] = "d";
-        }
-
-        traductor[3] = digit5.find((digit) => (findCommonChars(digit, traductor[1]).length === 2)) as string;
-        digit5.splice(digit5.indexOf(traductor[3]), 1);
-        traductor[5] = digit5.find((digit) => (findCommonChars(digit, traductor[3] + traductor[4]).length === 5)) as string;
-        traductor[2] = digit5.find((digit) => (findCommonChars(digit, traductor[5]).length === 3)) as string;
-        traductor[6] = digit6.find((digit) => (findCommonChars(digit, traductor[1]).length === 1)) as string;
-        traductor[0] = digit6.find((digit) => !digit.includes(getKeyByValue(segment, "d") as string)) as string;
-        traductor[9] = digit6.find((digit) => ![traductor[0], traductor[6]].includes(digit)) as string;
 
         let resultString = "";
-
         for (const digit of output) {
-            for (let i = 0; i < 10; i++) {
-                if (traductor[i].length === digit.length && findCommonChars(digit, traductor[i]).length === digit.length) {
-                    resultString += i;
-                    break;
-                }
-            }
+            resultString += inverter[getUniqueId(digit)];
         }
 
         total += parseInt(resultString);
@@ -85,29 +71,15 @@ function run2(data: Array<string>): number {
     return total;
 
     function findCommonChars(a: string, b: string) {
-        const common = [];
-        for (const char of a) {
-            if (b.includes(char)) {
-                common.push(char);
-            }
-        }
-        return common;
+        return _.intersection(a.split(""), b.split(""))
     }
 
     function findDifferenceChars(a: string, b: string) {
-        const difference = [];
-        const common = findCommonChars(a, b);
-        const full = a + b;
-        for (const char of full) {
-            if (!common.includes(char)) {
-                difference.push(char);
-            }
-        }
-        return difference;
+        return _.xor(a.split(""), b.split(""))
     }
 
-    function getKeyByValue(object, value) {
-        return Object.keys(object).find(key => object[key] === value);
+    function getUniqueId(input: string) {
+        return input.split("").sort().join("");
     }
 }
 

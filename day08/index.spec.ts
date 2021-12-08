@@ -1,5 +1,6 @@
 import { readInput } from "../utils";
 import { run1, run2 } from "./index";
+import * as _ from "lodash";
 
 test("day08 - run 1", () => {
     const data = readInput(__dirname);
