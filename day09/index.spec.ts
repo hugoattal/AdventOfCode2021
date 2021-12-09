@@ -1,7 +1,7 @@
 import { readInput } from "../utils";
 import { run1, run2 } from "./index";
 
-test("day08 - run 1", () => {
+test("day09 - run 1", () => {
     const data = readInput(__dirname);
 
     const response = run1(data);
@@ -9,7 +9,7 @@ test("day08 - run 1", () => {
     console.log(response);
 });
 
-test("day08 - run 2", () => {
+test("day09 - run 2", () => {
     const data = readInput(__dirname);
 
     const response = run2(data);
