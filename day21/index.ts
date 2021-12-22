@@ -1,5 +1,4 @@
 import * as _ from "lodash";
-import { parseInt } from "lodash";
 
 function run1(data: Array<string>): number {
     let diceConfig = {
