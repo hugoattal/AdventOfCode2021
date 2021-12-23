@@ -381,6 +381,32 @@ function run2(data: Array<string>): number {
                 continue;
             }
 
+            if (!isPlayerInRoom(player) && isTargetRoomReady(player)) {
+                const alreadyPlayers = state.players.filter((otherPlayer) => otherPlayer.location.x === player.targetRoom).length;
+                const target = {
+                    x: player.targetRoom,
+                    y: mapHeight - alreadyPlayers
+                };
+
+                const moveCost = getCost(player, target);
+
+                const newState = cloneDeep(state);
+                newState.players[p].location = target;
+                newState.players[p].locked = true;
+                newState.locked++;
+                newState.cost += moveCost;
+                newState.moves.push({ player: newState.players[p].id, location: target, cost: moveCost, locked: true });
+                addState(newState);
+                return;
+            }
+        }
+
+        for (let p = 0; p < state.players.length; p++) {
+            const player = state.players[p];
+            if (player.locked) {
+                continue;
+            }
+
             if (isPlayerInRoom(player)) {
                 if (!canPlayerMove(player)) {
                     continue;
@@ -397,25 +423,6 @@ function run2(data: Array<string>): number {
                     newState.moves.push({ player: newState.players[p].id, location: move, cost: moveCost });
                     addState(newState);
                 }
-                continue;
-            }
-
-            if (isTargetRoomReady(player)) {
-                const alreadyPlayers = state.players.filter((otherPlayer) => otherPlayer.location.x === player.targetRoom).length;
-                const target = {
-                    x: player.targetRoom,
-                    y: mapHeight - alreadyPlayers
-                };
-
-                const moveCost = getCost(player, target);
-
-                const newState = cloneDeep(state);
-                newState.players[p].location = target;
-                newState.players[p].locked = true;
-                newState.locked++;
-                newState.cost += moveCost;
-                newState.moves.push({ player: newState.players[p].id, location: target, cost: moveCost, locked: true });
-                addState(newState);
             }
         }
 
