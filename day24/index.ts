@@ -37,6 +37,52 @@ function run1(data: Array<string>): number {
 
     const input:Array<number> = [];
 
+    /*
+inp w		|inp w		|inp w		|inp w		|inp w		|inp w		|inp w		|inp w		|inp w		|inp w		|inp w		|inp w		|inp w		|inp w		|
+mul x 0		|mul x 0	|mul x 0	|mul x 0	|mul x 0	|mul x 0	|mul x 0	|mul x 0	|mul x 0	|mul x 0	|mul x 0	|mul x 0	|mul x 0	|mul x 0	|
+add x z		|add x z	|add x z	|add x z	|add x z	|add x z	|add x z	|add x z	|add x z	|add x z	|add x z	|add x z	|add x z	|add x z	|
+mod x 26	|mod x 26	|mod x 26	|mod x 26	|mod x 26	|mod x 26	|mod x 26	|mod x 26	|mod x 26	|mod x 26	|mod x 26	|mod x 26	|mod x 26	|mod x 26	|
+
+div z 1		|div z 1	|div z 1	|div z 1	|div z 26	|div z 1	|div z 26	|div z 1	|div z 26	|div z 26	|div z 1	|div z 26	|div z 26	|div z 26	|
+add x 14	|add x 11	|add x 12	|add x 11	|add x -10	|add x 15	|add x -14	|add x 10	|add x -4	|add x -3	|add x 13	|add x -3	|add x -9	|add x -12	|
+
+eql x w		|eql x w	|eql x w	|eql x w	|eql x w	|eql x w	|eql x w	|eql x w	|eql x w	|eql x w	|eql x w	|eql x w	|eql x w	|eql x w	|
+eql x 0		|eql x 0	|eql x 0	|eql x 0	|eql x 0	|eql x 0	|eql x 0	|eql x 0	|eql x 0	|eql x 0	|eql x 0	|eql x 0	|eql x 0	|eql x 0	|
+mul y 0		|mul y 0	|mul y 0	|mul y 0	|mul y 0	|mul y 0	|mul y 0	|mul y 0	|mul y 0	|mul y 0	|mul y 0	|mul y 0	|mul y 0	|mul y 0	|
+add y 25	|add y 25	|add y 25	|add y 25	|add y 25	|add y 25	|add y 25	|add y 25	|add y 25	|add y 25	|add y 25	|add y 25	|add y 25	|add y 25	|
+mul y x		|mul y x	|mul y x	|mul y x	|mul y x	|mul y x	|mul y x	|mul y x	|mul y x	|mul y x	|mul y x	|mul y x	|mul y x	|mul y x	|
+add y 1		|add y 1	|add y 1	|add y 1	|add y 1	|add y 1	|add y 1	|add y 1	|add y 1	|add y 1	|add y 1	|add y 1	|add y 1	|add y 1	|
+mul z y		|mul z y	|mul z y	|mul z y	|mul z y	|mul z y	|mul z y	|mul z y	|mul z y	|mul z y	|mul z y	|mul z y	|mul z y	|mul z y	|
+mul y 0		|mul y 0	|mul y 0	|mul y 0	|mul y 0	|mul y 0	|mul y 0	|mul y 0	|mul y 0	|mul y 0	|mul y 0	|mul y 0	|mul y 0	|mul y 0	|
+add y w		|add y w	|add y w	|add y w	|add y w	|add y w	|add y w	|add y w	|add y w	|add y w	|add y w	|add y w	|add y w	|add y w	|
+
+add y 16	|add y 3	|add y 2	|add y 7	|add y 13	|add y 6	|add y 10	|add y 11	|add y 6	|add y 5	|add y 11	|add y 4	|add y 4	|add y 6	|
+
+mul y x		|mul y x	|mul y x	|mul y x	|mul y x	|mul y x	|mul y x	|mul y x	|mul y x	|mul y x	|mul y x	|mul y x	|mul y x	|mul y x	|
+add z y		|add z y	|add z y	|add z y	|add z y	|add z y	|add z y	|add z y	|add z y	|add z y	|add z y	|add z y	|add z y	|add z y	|
+
+A 14		|A 11		|A 12		|A 11		|A -10		|A 15		|A -14		|A 10		|A -4		|A -3		|A 13		|A -3		|A -9		|A -12		|
+B 16		|B 3		|B 2		|B 7		|B 13		|B 6		|B 10		|B 11		|B 6		|B 5		|B 11		|B 4		|B 4		|B 6		|
+
+
+W = input
+Z /= 1 or 26
+
+X = ((Z % 26) + A !== input)
+Y = 25 * X + 1
+Z *= Y
+
+Y = (input + B) * X
+Z += Y
+---
+Case positive
+X = 1
+Z *= 26 + (input + B)
+---
+Case negative
+X = 0 (should be 0 => Z%26+A === input)
+    */
+
     // Part 1
     input[0] = 5;  // 0 - Push 5 + 16 = 21
     input[1] = 9;  // 1 - Push 9 + 3 = 12
